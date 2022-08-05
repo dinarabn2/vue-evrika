@@ -1,11 +1,13 @@
 <template>
      <div class="promo">
        <div class="header">
-        <div class="text">Список новых заявок</div>
-        <a href="#"><img src="./../assets/update.svg" alt="update"></a>
+        <div class="wrapper-left">
+            <div class="text">Список новых заявок</div>
+            <img src="./../assets/update.svg" alt="update">
+        </div>
         <div class="search">
             <img src="./../assets/Vector.svg" alt="search" class="search-logo">
-            <input type="text" placeholder="Поиск...">
+            <input type="text" placeholder="Поиск..." v-model="searchFilter" @keypress.enter="getOrders">
         </div>
     </div>
     <Fields @filterParams-changed="passFilters" />
@@ -34,7 +36,7 @@
             <hr>
         </div>
     </div>
-    <Pagination @page-changed="passPage" @count-changed="passPerPage"/>
+    <Pagination @page-changed="passPage" @count-changed="passPerPage" :all="this.amount"/>
     </div>
 </template>
 
@@ -51,10 +53,12 @@ export default {
     data() {
         return {
             filters: {},
-            orders: []
+            orders: [],
+            amount: 0,
+            searchFilter: ''
         }
     },
-     async mounted() {
+    async mounted() {
         this.getOrders()
     },
     methods: {
@@ -66,6 +70,8 @@ export default {
             + `&periodTo=${this.filters.periodTo ? this.filters.periodTo : ''}`
             + `&page=${this.filters.currentPage ? this.filters.currentPage : ''}`
             + `&perPage=${this.filters.perPage ? this.filters.perPage : ''}`
+            + `&status=0`
+            + `&search=${this.searchFilter}`
             , {
                 headers: {
                     "Content-Type": "application/json",
@@ -74,7 +80,11 @@ export default {
                 }
             })
             .then(response => response.json())
-            .then(json => this.orders = json.data)
+            .then(json => {
+                this.amount = json.meta.total
+                console.log(this.amount)
+                this.orders = json.data
+            })
         },
         passFilters(filterParams) {
             console.log(this.filters)
@@ -181,5 +191,10 @@ hr {
     margin: 16px 0 16px 0;
     border: 0.5px solid #F0F0F0;
     width: 100%;
+}
+.wrapper-left {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
 }
 </style>

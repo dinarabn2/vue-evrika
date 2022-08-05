@@ -65,7 +65,7 @@
                     <div class="logout-icon">DB</div>
                     <div class="name">Dinara Bolat</div>
                     </div>
-                    <a class="logout-link" href="login"><img src="./../assets/logout.svg" alt="logout" class="log-out-icon" /></a>
+                    <img src="./../assets/logout.svg" alt="logout" class="log-out-icon" @click="logOut" />
                 </div>
             </div>
         </div>
@@ -75,12 +75,22 @@
 <script>
 export default {
     name: 'Menu',
+    methods: {
+        async logOut() {
+            await fetch('http://delivery-testapi.evrika.com/api/logout', {
+                method: 'POST'
+            })
+            localStorage.clear()
+            location.pathname = '/login'
+        }
+    }
 }
 </script>
 
 <style scoped>
 .menu-logo {
-    margin-top: 50px;
+    margin: 50px auto 0 auto;
+    display: block;
 }
 .menu-content {
     position: fixed;
@@ -156,8 +166,7 @@ li:hover {
     line-height: 21px;
     color: #FFFFFF;
 }
-.logout-link {
-    padding: 0;
-    height: 0;
+.log-out-icon {
+    cursor: pointer;
 }
 </style>

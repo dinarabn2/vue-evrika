@@ -6,8 +6,8 @@
         </div>
         <div class="password">
             <img class="lock" src="./../assets/lock.svg" alt="password">
-            <input type="password" placeholder="Пароль" v-model="form.password">
-            <img src="./../assets/Eye.svg" alt="eye" class="eye">
+            <input :type="type" placeholder="Пароль" v-model="form.password">
+            <img src="./../assets/Eye.svg" alt="eye" class="eye" @click="type==='password' ? type = 'text' : type='password'"/>
         </div>
         <input id ="remember" type="checkbox" name="check">
         <span>Запомнить</span>
@@ -24,7 +24,8 @@ export default {
             form: {
                 login: '',
                 password: ''
-            }
+            },
+            type: 'password'
         }
     },
     methods: {
@@ -48,6 +49,7 @@ export default {
                      this.$router.push('/main')
                 }
             })
+
         }
     }
 }

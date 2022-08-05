@@ -30,7 +30,7 @@ export default createRouter ({
                 },
                 {
                     path: '/:id',
-                    component: () => import('/src/components/jsdbm.vue')
+                    component: () => import('/src/components/Order.vue')
                 }
             ]
         },

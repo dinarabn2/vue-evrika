@@ -8,7 +8,7 @@
                 <img src="./../assets/right.svg" alt="right-arrow">
             </div>
         </div>
-        <div class="footer-descr">Всего:  </div>
+        <div class="footer-descr">Всего: {{ all }} </div>
         <div class="footer-select">
             <div class="select-count">
                 <select v-model="paginationFilter">
@@ -31,6 +31,9 @@ export default {
             currentPage: 1,
             paginationFilter: 10
         }
+    },
+    props: {
+        all: Number
     },
     methods: {
         increment() {
@@ -95,6 +98,7 @@ select {
     font-size: 13px;
     color: #001529;
     padding: 8px;
+    box-shadow: none;
 }
 .img {
     display: inherit;

@@ -1,7 +1,7 @@
 <template>
   <div class="auth">
     <div class="auth-main">
-      <img src="./../assets/main-logo.svg" alt="main-logo">
+      <img src="./../assets/main-logo.svg" alt="main-logo" class="auth-logo">
       <div class="descr">"Добро пожаловать в Сервис Доставки Товаров"</div>
       <Form />
     </div>
@@ -51,7 +51,7 @@ export default {
   color: #FFFFFF;
   margin-top: 50px;
 }
-img {
+.auth-logo{
     margin: 0 auto;
     display: block;
 }
