@@ -62,8 +62,8 @@
 
                 <div class="logout">
                     <div class="wrapper">
-                    <div class="logout-icon">DB</div>
-                    <div class="name">Dinara Bolat</div>
+                    <div class="logout-icon">{{ `${firstName[0]}${lastName[0]}` }}</div>
+                    <div class="name">{{ `${firstName} ${lastName}` }}</div>
                     </div>
                     <img src="./../assets/logout.svg" alt="logout" class="log-out-icon" @click="logOut" />
                 </div>
@@ -75,6 +75,18 @@
 <script>
 export default {
     name: 'Menu',
+    created() {
+        const firstName = localStorage.getItem('first-name')
+        const lastName = localStorage.getItem('last-name')
+        this.firstName = firstName
+        this.lastName = lastName
+    },
+    data() {
+        return {
+            firstName: null,
+            lastName: null
+        }
+    },
     methods: {
         async logOut() {
             await fetch('http://delivery-testapi.evrika.com/api/logout', {

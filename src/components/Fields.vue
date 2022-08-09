@@ -1,16 +1,16 @@
 <template>
     <div class="fields">
        <div class="wrapper">
-            <City @city-changed="handleCity" />
+            <City/>
        </div>
         <div class="wrapper">
             <Date/>
         </div>
         <div class="wrapper">
-           <Period @change-period="handlePeriod"/>
+           <Period/>
         </div>
         <div class="wrapper">
-            <WareHouse @warehouse-changed="handleWarehouse" />
+            <WareHouse />
         </div>
     </div>
 </template>
@@ -27,38 +27,6 @@ export default {
         Date,
         Period,
         WareHouse
-    },
-    methods: {
-        handleCity(currentCity) {
-            this.filterParams.city = currentCity
-        },
-        handleWarehouse(currentWarehouse) {
-            this.filterParams.warehouse = currentWarehouse
-        },
-        handlePeriod(periodFromTo) {
-            console.log(periodFromTo)
-            this.filterParams.periodFrom = periodFromTo[0]
-            this.filterParams.periodTo = periodFromTo[1]
-        }
-    },
-    data() {
-        return {
-            filterParams: {
-                city: '',
-                warehouse: '',
-                period: '',
-                periodFrom: '',
-                periodTo: ''
-            }
-        }
-    },
-    watch: {
-        filterParams: {
-            handler() {
-                this.$emit('filterParams-changed', this.filterParams)
-            },
-            deep: true
-        }
     }
 }
 </script>

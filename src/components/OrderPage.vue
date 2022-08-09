@@ -3,14 +3,14 @@
        <div class="header">
         <div class="wrapper-left">
             <div class="text">Список новых заявок</div>
-            <img src="./../assets/update.svg" alt="update">
+            <img src="./../assets/update.svg" alt="update" @click="reset" class="reset">
         </div>
         <div class="search">
             <img src="./../assets/Vector.svg" alt="search" class="search-logo">
-            <input type="text" placeholder="Поиск..." v-model="searchFilter" @keypress.enter="getOrders">
+            <input type="text" placeholder="Поиск..." v-model="this.filters.search" @keypress.enter="getOrders">
         </div>
     </div>
-    <Fields @filterParams-changed="passFilters" />
+    <Fields />
     <div class="content">
         <div class="title">Список заказов</div>
             <div>
@@ -24,25 +24,26 @@
             </div>
         <hr>
         <div v-for="order in orders" :key="order.id">
-            <router-link :to="`/${order.id}`">
                 <div class="columns">
                     <input type="checkbox" name="checkbox" class="checkbox"/>
-                    <span class="span">{{ order.number }}</span>
+                    <router-link :to="`/${order.id}`">
+                    <span class="span"><span class="blue">{{ order.number }}</span></span>
                     <span class="span">{{ order.address.city.name }}, {{ order.address.street }}</span>
                     <span class="span">{{ order.client.name }}</span>
                     <span class="span">{{ order.deliver_at }}, {{ order.period_begin_at.slice(0, -3) }} - {{ order.period_end_at.slice(0, -3) }}</span>
+                    </router-link>
                 </div>
-            </router-link>
             <hr>
         </div>
     </div>
-    <Pagination @page-changed="passPage" @count-changed="passPerPage" :all="this.amount"/>
+    <Pagination :all="this.amount"/>
     </div>
 </template>
 
 <script>
 import Fields from './Fields.vue'
 import Pagination from './Pagination.vue'
+import { useStore } from './../store/store'
 export default {
     name: 'OrderPage',
     components: {
@@ -52,10 +53,9 @@ export default {
 
     data() {
         return {
-            filters: {},
+            filters: useStore().$state.params,
             orders: [],
-            amount: 0,
-            searchFilter: ''
+            amount: 0
         }
     },
     async mounted() {
@@ -64,14 +64,14 @@ export default {
     methods: {
         async getOrders() {
             await fetch('http://delivery-testapi.evrika.com/api/dispatcher/deliveries?' 
-            + `&city=${this.filters.city ? this.filters.city : ''}`
-            + `&warehouse=${this.filters.warehouse ? this.filters.warehouse : ''}`
-            + `&periodFrom=${this.filters.periodFrom ? this.filters.periodFrom : ''}`
-            + `&periodTo=${this.filters.periodTo ? this.filters.periodTo : ''}`
-            + `&page=${this.filters.currentPage ? this.filters.currentPage : ''}`
-            + `&perPage=${this.filters.perPage ? this.filters.perPage : ''}`
+            + `&city=${this.filters.city}`
+            + `&warehouse=${this.filters.warehouse}`
+            + `&periodFrom=${this.filters.periodFrom}`
+            + `&periodTo=${this.filters.periodTo}`
+            + `&page=${this.filters.page}`
+            + `&perPage=${this.filters.perPage}`
             + `&status=0`
-            + `&search=${this.searchFilter}`
+            + `&search=${this.filters.search}`
             , {
                 headers: {
                     "Content-Type": "application/json",
@@ -90,12 +90,8 @@ export default {
             console.log(this.filters)
             this.filters = filterParams
         },
-        passPage(page) {
-            this.filters.currentPage = page
-            console.log(this.filters);
-        },
-        passPerPage(count) {
-            this.filters.perPage = count
+        reset() {
+            useStore().resetParams()
         }
     },
     watch: {
@@ -105,11 +101,14 @@ export default {
             },
             deep: true
         }
-    }
+    },
 }
 </script>
 
 <style scoped>
+.reset {
+    cursor: pointer;
+}
 .promo {
     margin-right: 50px;
     padding-top: 30px;
@@ -135,6 +134,9 @@ input {
     font-size: 30px;
     line-height: 35px;
     color: #001529;
+}
+.blue {
+    color: #0069FF;
 }
 a{
     display: contents;

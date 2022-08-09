@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         async signIn() {
-            const res = await fetch('http://delivery-testapi.evrika.com/api/login',{
+            await fetch('http://delivery-testapi.evrika.com/api/login',{
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -43,10 +43,14 @@ export default {
                 })
             })
             .then(res => res.json())
-            .then(data => localStorage.setItem('token', data.data.token))
+            .then(data => {
+                localStorage.setItem('token', data.data.token)
+                localStorage.setItem('first-name', data.data.user.first_name)
+                localStorage.setItem('last-name', data.data.user.last_name)
+            })
             .then(()=> {
                 if(localStorage.getItem('token')) {
-                     this.$router.push('/main')
+                    this.$router.push('/main')
                 }
             })
 

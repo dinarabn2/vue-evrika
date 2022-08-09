@@ -2,7 +2,7 @@
   <div class="filter">
     <img src="./../assets/City.svg" alt="city" id="city-logo" />
     <div class="select-wrapper">
-        <select @change="$emit('city-changed', currentCity)" v-model="currentCity" class="select" name="cities" id="city">
+        <select  v-model="params.city" class="select" name="cities" id="city">
             <option disabled value="">Город</option>
             <option v-for="city in cities" :key="city.name">{{ city.name }}</option>
         </select>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { useStore } from './../store/store'
 export default {
     created() {
         this.getCities()
@@ -31,9 +32,9 @@ export default {
     data() {
         return {
             cities: [],
-            currentCity: ''
+            params: useStore().$state.params
         }
-    } 
+    }
 }
 </script>
 

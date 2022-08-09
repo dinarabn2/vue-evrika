@@ -11,7 +11,7 @@
         <div class="footer-descr">Всего: {{ all }} </div>
         <div class="footer-select">
             <div class="select-count">
-                <select v-model="paginationFilter">
+                <select v-model="params.perPage">
                     <option value="10">10 заказов</option>
                     <option value="20">20 заказов</option>
                     <option value="30">30 заказов</option>
@@ -24,11 +24,13 @@
 </template>
 
 <script>
+import { useStore } from '@/store/store'
+
 export default {
     name: 'Pagination',
     data() {
         return {
-            currentPage: 1,
+            params: useStore().$state.params,
             paginationFilter: 10
         }
     },
@@ -37,25 +39,13 @@ export default {
     },
     methods: {
         increment() {
-            return this.currentPage++;
+            return this.params.page++;
         },
         decrement() {
-            if (this.currentPage !== 1) {
-                return this.currentPage--;
+            if (this.params.page !== 1) {
+                return this.params.page--;
             }
 
-        }
-    },
-    watch: {
-        currentPage: {
-            handler() {
-                this.$emit('page-changed', this.currentPage)
-            },
-        },
-        paginationFilter: {
-            handler() {
-                this.$emit('count-changed', this.paginationFilter)
-            },
         }
     }
 }
